@@ -15,8 +15,20 @@ public class BridgeGame {
 	private boolean moveSuccessSign;
 
 	public BridgeGame(List<String> bridge) {
+
+		for (String moveOptionSignature : bridge) {
+			validateInjectedMoveOptionSignature(moveOptionSignature);
+		}
 		this.bridge = bridge;
 		tryCount++;
+	}
+
+	private void validateInjectedMoveOptionSignature(String moveStringOption) {
+
+		if (!moveStringOption.equals(BridgeMoveOption.UP.getSignatureOption())
+			&& !moveStringOption.equals(BridgeMoveOption.DOWN.getSignatureOption())) {
+			throw new IllegalStateException(ErrorMessage.MOVE_OPTION_SIGNATURE);
+		}
 	}
 
 	public void move(String moveOptionSignature) {

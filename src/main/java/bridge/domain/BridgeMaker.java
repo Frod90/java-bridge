@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bridge.constant.BridgeMoveOption;
-import bridge.constant.ErrorMessage;
 
 public class BridgeMaker {
 
@@ -19,7 +18,6 @@ public class BridgeMaker {
 		List<String> bridge = new ArrayList<>();
 
 		for (int i = 0; i < size; i++) {
-
 			String section = makeBridgeSection();
 			bridge.add(section);
 		}
@@ -30,19 +28,7 @@ public class BridgeMaker {
 	private String makeBridgeSection() {
 
 		int moveOptionNumber = bridgeNumberGenerator.generate();
-		validateMoveOptionRange(moveOptionNumber);
-
-		String moveOptionSignature = toStringMoveOption(moveOptionNumber);
-		validateMoveOptionSignature(moveOptionSignature);
-
-		return moveOptionSignature;
-	}
-
-	private void validateMoveOptionSignature(String moveStringOption) {
-
-		if (moveStringOption.equals(BridgeMoveOption.FAIL.getSignatureOption())) {
-			throw new IllegalStateException(ErrorMessage.MOVE_OPTION_SIGNATURE);
-		}
+		return toStringMoveOption(moveOptionNumber);
 	}
 
 	private String toStringMoveOption(int moveNumberOption) {
@@ -58,11 +44,4 @@ public class BridgeMaker {
 		return BridgeMoveOption.FAIL.getSignatureOption();
 	}
 
-	private void validateMoveOptionRange(int moveOption) {
-
-		if (moveOption != BridgeMoveOption.UP.getNumberOption()
-			&& moveOption != BridgeMoveOption.DOWN.getNumberOption()) {
-			throw new IllegalStateException(ErrorMessage.MOVE_OPTION_NUMBER);
-		}
-	}
 }
