@@ -61,7 +61,7 @@ public class BridgeGame {
 
 		if (!BridgeMoveOption.UP.getSignatureOption().equalsIgnoreCase(moveOptionSignature)
 			&& !BridgeMoveOption.DOWN.getSignatureOption().equalsIgnoreCase(moveOptionSignature)) {
-			throw new IllegalArgumentException(ErrorMessage.MOVE_OPTION_NUMBER);
+			throw new IllegalArgumentException(ErrorMessage.INPUT_MOVE_OPTION_SIGNATURE);
 		}
 	}
 

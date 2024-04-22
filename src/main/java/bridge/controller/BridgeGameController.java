@@ -11,7 +11,7 @@ import bridge.view.OutputView;
 
 public class BridgeGameController {
 
-	private final BridgeGame bridgeGame;
+	private BridgeGame bridgeGame;
 	private final BridgeMapMaker bridgeMapMaker;
 	private final InputView inputView;
 	private final OutputView outputView;
@@ -25,38 +25,37 @@ public class BridgeGameController {
 		BridgeRandomNumberGenerator bridgeRandomNumberGenerator = new BridgeRandomNumberGenerator();
 		BridgeMaker bridgeMaker = new BridgeMaker(bridgeRandomNumberGenerator);
 
-		int bridgeSize = inputView.readBridgeSize();
-		List<String> bridge = bridgeMaker.makeBridge(bridgeSize);
-		bridgeGame = new BridgeGame(bridge);
+		controlMakingBridge(bridgeMaker);
 		bridgeMapMaker = new BridgeMapMaker();
+	}
+
+	private void controlMakingBridge(BridgeMaker bridgeMaker) {
+
+		while (true) {
+			try {
+				int bridgeSize = inputView.readBridgeSize();
+				List<String> bridge = bridgeMaker.makeBridge(bridgeSize);
+				bridgeGame = new BridgeGame(bridge);
+				return;
+			} catch (IllegalArgumentException e) {
+				System.out.println(e.getMessage());
+			}
+		}
 	}
 
 	public void play() {
 
 		String input;
 		do {
-
-			for (int i = 0; i < bridgeGame.getBridgeSize(); i++) {
-				controlInputMoveOption();
-				String map = bridgeMapMaker.make(bridgeGame.getBridge(), bridgeGame.isMoveSuccess(), bridgeGame.getMoveCount());
-				outputView.printMap(map);
-
-				if (!bridgeGame.isMoveSuccess()) {
-					break;
-				}
-
-			}
-
+			proceedMoveRound();
 			if (bridgeGame.isCrossBridge()) {
 				break;
 			}
 
 			input = inputView.readGameCommand();
-
 			if (input.equalsIgnoreCase("R")) {
 				bridgeGame.retry();
 			}
-
 		} while (!input.equalsIgnoreCase("Q"));
 
 		String map = bridgeMapMaker.make(bridgeGame.getBridge(), bridgeGame.isMoveSuccess(), bridgeGame.getMoveCount());
@@ -64,8 +63,21 @@ public class BridgeGameController {
 
 	}
 
-	private void controlInputMoveOption() {
+	private void proceedMoveRound() {
 
+		for (int i = 0; i < bridgeGame.getBridgeSize(); i++) {
+			controlInputMoveOption();
+			String map = bridgeMapMaker.make(bridgeGame.getBridge(), bridgeGame.isMoveSuccess(),
+				bridgeGame.getMoveCount());
+			outputView.printMap(map);
+
+			if (!bridgeGame.isMoveSuccess()) {
+				break;
+			}
+		}
+	}
+
+	private void controlInputMoveOption() {
 		boolean errorSign;
 		do {
 			try {
