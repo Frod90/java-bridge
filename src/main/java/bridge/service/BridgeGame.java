@@ -3,6 +3,7 @@ package bridge.service;
 import java.util.List;
 
 import bridge.constant.BridgeMoveOption;
+import bridge.constant.ErrorMessage;
 
 public class BridgeGame {
 
@@ -33,9 +34,9 @@ public class BridgeGame {
 
 	private void validateInputMoveOptionSignature(String moveOptionSignature) {
 
-		if(!BridgeMoveOption.UP.getSignatureOption().equalsIgnoreCase(moveOptionSignature)
-		&& !BridgeMoveOption.DOWN.getSignatureOption().equalsIgnoreCase(moveOptionSignature)) {
-			throw new IllegalArgumentException("지정된 이동 명령어(U, D)만 사용 가능합니다.");
+		if (!BridgeMoveOption.UP.getSignatureOption().equalsIgnoreCase(moveOptionSignature)
+			&& !BridgeMoveOption.DOWN.getSignatureOption().equalsIgnoreCase(moveOptionSignature)) {
+			throw new IllegalArgumentException(ErrorMessage.INPUT_MOVE_OPTION_SIGNATURE);
 		}
 	}
 
@@ -59,6 +60,10 @@ public class BridgeGame {
 
 	public List<String> getBridge() {
 		return bridge;
+	}
+
+	public int getBridgeSize() {
+		return bridge.size();
 	}
 
 	public int getMoveCount() {

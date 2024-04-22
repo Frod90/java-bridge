@@ -2,37 +2,46 @@ package bridge.controller;
 
 import java.util.List;
 
-import bridge.BridgeRandomNumberGenerator;
-import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMaker;
+import bridge.domain.BridgeRandomNumberGenerator;
+import bridge.service.BridgeGame;
+import bridge.service.BridgeMapMaker;
 import bridge.view.InputView;
 import bridge.view.OutputView;
 
 public class BridgeGameController {
 
-	public void play() {
-		InputView inputView = new InputView();
-		OutputView outputView = new OutputView();
+	private final BridgeGame bridgeGame;
+	private final BridgeMapMaker bridgeMapMaker;
+	private final InputView inputView;
+	private final OutputView outputView;
 
-		int bridgeSize = inputView.readBridgeSize();
+	public BridgeGameController() {
 
-		BridgeRandomNumberGenerator bridgeRandomNumberGenerator = new BridgeRandomNumberGenerator();
-		BridgeMaker bridgeMaker = new BridgeMaker(bridgeRandomNumberGenerator);
-		List<String> bridge = bridgeMaker.makeBridge(bridgeSize);
-		BridgeGame bridgeGame = new BridgeGame(bridge);
+		inputView = new InputView();
+		outputView = new OutputView();
 
 		System.out.println("다리 건너기 게임을 시작합니다.");
+		BridgeRandomNumberGenerator bridgeRandomNumberGenerator = new BridgeRandomNumberGenerator();
+		BridgeMaker bridgeMaker = new BridgeMaker(bridgeRandomNumberGenerator);
+
+		int bridgeSize = inputView.readBridgeSize();
+		List<String> bridge = bridgeMaker.makeBridge(bridgeSize);
+		bridgeGame = new BridgeGame(bridge);
+		bridgeMapMaker = new BridgeMapMaker();
+	}
+
+	public void play() {
 
 		String input;
 		do {
 
-			for (int i = 0; i < bridgeSize; i++){
+			for (int i = 0; i < bridgeGame.getBridgeSize(); i++) {
+				controlInputMoveOption();
+				String map = bridgeMapMaker.make(bridgeGame.getBridge(), bridgeGame.isMoveSuccess(), bridgeGame.getMoveCount());
+				outputView.printMap(map);
 
-				String moveOptionSignature = inputView.readMoving();
-				bridgeGame.move(moveOptionSignature);
-				outputView.printMap(bridgeGame);
-
-				if(!bridgeGame.isMoveSuccess()) {
+				if (!bridgeGame.isMoveSuccess()) {
 					break;
 				}
 
@@ -50,7 +59,24 @@ public class BridgeGameController {
 
 		} while (!input.equalsIgnoreCase("Q"));
 
-		outputView.printResult(bridgeGame);
+		String map = bridgeMapMaker.make(bridgeGame.getBridge(), bridgeGame.isMoveSuccess(), bridgeGame.getMoveCount());
+		outputView.printResult(bridgeGame, map);
 
 	}
+
+	private void controlInputMoveOption() {
+
+		boolean errorSign;
+		do {
+			try {
+				String moveOptionSignature = inputView.readMoving();
+				bridgeGame.move(moveOptionSignature);
+				errorSign = false;
+			} catch (IllegalArgumentException e) {
+				errorSign = true;
+				System.out.println(e.getMessage());
+			}
+		} while (errorSign);
+	}
+
 }
