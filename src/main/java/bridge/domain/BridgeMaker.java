@@ -3,7 +3,6 @@ package bridge.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import bridge.BridgeNumberGenerator;
 import bridge.constant.BridgeMoveOption;
 import bridge.constant.ErrorMessage;
 
