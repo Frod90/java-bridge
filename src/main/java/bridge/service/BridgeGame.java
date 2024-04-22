@@ -16,11 +16,24 @@ public class BridgeGame {
 
 	public BridgeGame(List<String> bridge) {
 
+		validateBridgeSize(bridge.size());
+
 		for (String moveOptionSignature : bridge) {
 			validateInjectedMoveOptionSignature(moveOptionSignature);
 		}
+
 		this.bridge = bridge;
 		tryCount++;
+	}
+
+	private void validateBridgeSize(int bridgeSize) {
+
+		final int MIN_BRIDGE_SIZE = 3;
+		final int MAX_BRIDGE_SIZE = 20;
+
+		if (bridgeSize < MIN_BRIDGE_SIZE || MAX_BRIDGE_SIZE < bridgeSize) {
+			throw new IllegalArgumentException(ErrorMessage.BRIDGE_SIZE_INPUT);
+		}
 	}
 
 	private void validateInjectedMoveOptionSignature(String moveStringOption) {
@@ -48,7 +61,7 @@ public class BridgeGame {
 
 		if (!BridgeMoveOption.UP.getSignatureOption().equalsIgnoreCase(moveOptionSignature)
 			&& !BridgeMoveOption.DOWN.getSignatureOption().equalsIgnoreCase(moveOptionSignature)) {
-			throw new IllegalArgumentException(ErrorMessage.INPUT_MOVE_OPTION_SIGNATURE);
+			throw new IllegalArgumentException(ErrorMessage.MOVE_OPTION_NUMBER);
 		}
 	}
 
