@@ -44,4 +44,8 @@ public class OutputView {
 			System.out.println(SUCCESS_CONFIRM_MESSAGE + FAIL_MESSAGE);
 		}
 	}
+
+	public void printErrorMessage(String errorMessage) {
+		System.out.println(errorMessage);
+	}
 }

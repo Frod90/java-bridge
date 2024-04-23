@@ -11,6 +11,12 @@ public class InputView {
 	private static final String MOVE_OPTION_SIGNATURE_INPUT_MESSAGE = "이동할 칸을 선택해주세요. (위: U, 아래: D)";
 	private static final String RETRY_OR_GIVE_UP_GAME_COMMEND_INPUT_MESSAGE = "게임을 다시 시도할지 여부를 입력해주세요. (재시도: R, 종료: Q)";
 
+	private final OutputView outputView;
+
+	public InputView() {
+		this.outputView = new OutputView();
+	}
+
 	public int readBridgeSize() {
 
 		do {
@@ -18,7 +24,7 @@ public class InputView {
 				String inputBridgeSize = validateNumericInput();
 				return Integer.parseInt(inputBridgeSize);
 			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());
+				outputView.printErrorMessage(e.getMessage());
 			}
 		} while (true);
 	}

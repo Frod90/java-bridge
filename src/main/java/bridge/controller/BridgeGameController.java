@@ -38,7 +38,7 @@ public class BridgeGameController {
 				bridgeGame = new BridgeGame(bridge);
 				return;
 			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());
+				outputView.printErrorMessage(e.getMessage());
 			}
 		}
 	}
@@ -67,7 +67,7 @@ public class BridgeGameController {
 				}
 				return bridgeGame.isGiveUp(input);
 			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());
+				outputView.printErrorMessage(e.getMessage());
 			}
 		}
 	}
