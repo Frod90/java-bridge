@@ -38,7 +38,7 @@ public class InputView {
 		System.out.println(BRIDGE_SIZE_INPUT_MESSAGE);
 		String numericInput = Console.readLine().trim();
 
-		if (!NUMBER_PATTERN.matcher(numericInput).matches()) {
+		if (!NUMBER_PATTERN.matcher(numericInput).matches() || numericInput.isBlank()) {
 			throw new IllegalArgumentException(ErrorMessage.NUMERIC_INPUT);
 		}
 		return numericInput;
