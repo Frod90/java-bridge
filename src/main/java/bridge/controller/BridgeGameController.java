@@ -30,14 +30,14 @@ public class BridgeGameController {
 	}
 
 	private void controlMakingBridge(BridgeMaker bridgeMaker) {
-
-		while (true) {
+		boolean errorSign = true;
+		while (errorSign) {
 			try {
 				int bridgeSize = inputView.readBridgeSize();
 				List<String> bridge = bridgeMaker.makeBridge(bridgeSize);
 				bridgeGame = new BridgeGame(bridge);
-				return;
-			} catch (IllegalArgumentException e) {
+				errorSign = false;
+			} catch (IllegalArgumentException | IllegalStateException e) {
 				outputView.printErrorMessage(e.getMessage());
 			}
 		}
@@ -93,7 +93,7 @@ public class BridgeGameController {
 				errorSign = false;
 			} catch (IllegalArgumentException e) {
 				errorSign = true;
-				System.out.println(e.getMessage());
+				outputView.printErrorMessage(e.getMessage());
 			}
 		} while (errorSign);
 	}
