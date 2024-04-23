@@ -44,7 +44,6 @@ public class BridgeGameController {
 	}
 
 	public void play() {
-
 		do {
 			proceedMoveRound();
 
@@ -55,21 +54,20 @@ public class BridgeGameController {
 
 		String map = bridgeMapMaker.make(bridgeGame.getBridge(), bridgeGame.isMoveSuccess(), bridgeGame.getMoveCount());
 		outputView.printResult(bridgeGame, map);
-
 	}
 
 	private boolean isRetryOrGiveUp() {
-		while (true) {
+		String input = "";
+		while (input.isBlank()) {
 			try {
-				String input = inputView.readGameCommand();
-				if (!bridgeGame.isGiveUp(input)) {
-					bridgeGame.retry(input);
-				}
+				input = inputView.readGameCommand();
+				bridgeGame.retry(input);
 				return bridgeGame.isGiveUp(input);
 			} catch (IllegalArgumentException e) {
 				outputView.printErrorMessage(e.getMessage());
 			}
 		}
+		return bridgeGame.isGiveUp(input);
 	}
 
 	private void proceedMoveRound() {

@@ -18,15 +18,17 @@ public class InputView {
 	}
 
 	public int readBridgeSize() {
+		String inputBridgeSize = "";
 
 		do {
 			try {
-				String inputBridgeSize = validateNumericInput();
-				return Integer.parseInt(inputBridgeSize);
+				inputBridgeSize = validateNumericInput();
 			} catch (IllegalArgumentException e) {
 				outputView.printErrorMessage(e.getMessage());
 			}
-		} while (true);
+		} while (inputBridgeSize.isBlank());
+
+		return Integer.parseInt(inputBridgeSize);
 	}
 
 	private String validateNumericInput() {
