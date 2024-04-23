@@ -21,7 +21,7 @@ public class BridgeGameController {
 		inputView = new InputView();
 		outputView = new OutputView();
 
-		System.out.println("다리 건너기 게임을 시작합니다.");
+		outputView.printStartGame();
 		BridgeRandomNumberGenerator bridgeRandomNumberGenerator = new BridgeRandomNumberGenerator();
 		BridgeMaker bridgeMaker = new BridgeMaker(bridgeRandomNumberGenerator);
 
