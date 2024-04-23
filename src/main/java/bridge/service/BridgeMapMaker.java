@@ -15,7 +15,6 @@ public class BridgeMapMaker {
 	private static final int INDEX_CONVERTER = -1;
 
 	public String make(List<String> bridge, boolean moveSuccessSign, int moveCount) {
-
 		StringBuilder upSideMap = new StringBuilder(START_MAP_FORMAT);
 		StringBuilder downSideMap = new StringBuilder(START_MAP_FORMAT);
 
@@ -30,7 +29,6 @@ public class BridgeMapMaker {
 	}
 
 	private String makeUpSideLastSection(List<String> bridge, boolean moveSuccessSign, int moveCount) {
-
 		if (moveSuccessSign && bridge.get(moveCount + INDEX_CONVERTER)
 			.equals(BridgeMoveOption.UP.getSignatureOption())) {
 			return RIGHT_MAP_SECTION_SIGN;
@@ -45,7 +43,6 @@ public class BridgeMapMaker {
 	}
 
 	private String makeDownSideLastSection(List<String> bridge, boolean moveSuccessSign, int moveCount) {
-
 		if (moveSuccessSign && bridge.get(moveCount + INDEX_CONVERTER)
 			.equals(BridgeMoveOption.DOWN.getSignatureOption())) {
 			return RIGHT_MAP_SECTION_SIGN;

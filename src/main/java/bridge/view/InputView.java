@@ -29,7 +29,6 @@ public class InputView {
 		if (!NUMBER_PATTERN.matcher(numericInput).matches()) {
 			throw new IllegalArgumentException(ErrorMessage.NUMERIC_INPUT);
 		}
-
 		return numericInput;
 	}
 
