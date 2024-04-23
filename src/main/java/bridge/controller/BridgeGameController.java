@@ -11,10 +11,10 @@ import bridge.view.OutputView;
 
 public class BridgeGameController {
 
-	private BridgeGame bridgeGame;
 	private final BridgeMapMaker bridgeMapMaker;
 	private final InputView inputView;
 	private final OutputView outputView;
+	private BridgeGame bridgeGame;
 
 	public BridgeGameController() {
 
@@ -45,22 +45,31 @@ public class BridgeGameController {
 
 	public void play() {
 
-		String input;
 		do {
 			proceedMoveRound();
+
 			if (bridgeGame.isCrossBridge()) {
 				break;
 			}
-
-			input = inputView.readGameCommand();
-			if (input.equalsIgnoreCase("R")) {
-				bridgeGame.retry();
-			}
-		} while (!input.equalsIgnoreCase("Q"));
+		} while (!isRetryOrGiveUp());
 
 		String map = bridgeMapMaker.make(bridgeGame.getBridge(), bridgeGame.isMoveSuccess(), bridgeGame.getMoveCount());
 		outputView.printResult(bridgeGame, map);
 
+	}
+
+	private boolean isRetryOrGiveUp() {
+		while (true) {
+			try {
+				String input = inputView.readGameCommand();
+				if (!bridgeGame.isGiveUp(input)) {
+					bridgeGame.retry(input);
+				}
+				return bridgeGame.isGiveUp(input);
+			} catch (IllegalArgumentException e) {
+				System.out.println(e.getMessage());
+			}
+		}
 	}
 
 	private void proceedMoveRound() {

@@ -8,6 +8,8 @@ import bridge.constant.ErrorMessage;
 public class BridgeGame {
 
 	private static final int INDEX_CONVERTER = -1;
+	private static final String RESTART_COMMEND = "R";
+	private static final String GIVE_UP_COMMEND = "Q";
 
 	private final List<String> bridge;
 	private int moveCount;
@@ -69,14 +71,31 @@ public class BridgeGame {
 		return moveSuccessSign;
 	}
 
-	public void retry() {
+	public boolean isGiveUp(String gameCommend) {
+		validateGameCommend(gameCommend);
+		return gameCommend.equalsIgnoreCase(GIVE_UP_COMMEND);
+	}
 
-		moveCount = 0;
-		tryCount++;
+	private void validateGameCommend(String gameCommend) {
+
+		if (!gameCommend.equalsIgnoreCase(GIVE_UP_COMMEND)
+			&& !gameCommend.equalsIgnoreCase(RESTART_COMMEND)) {
+			throw new IllegalArgumentException(ErrorMessage.GAME_COMMEND_INPUT);
+		}
+	}
+
+	public void retry(String gameCommend) {
+
+		validateGameCommend(gameCommend);
+
+		if (gameCommend.equalsIgnoreCase(RESTART_COMMEND)) {
+			moveCount = 0;
+			tryCount++;
+		}
 	}
 
 	public boolean isCrossBridge() {
-		return moveCount == bridge.size();
+		return moveCount == bridge.size() && moveSuccessSign;
 	}
 
 	public int getTryCount() {
