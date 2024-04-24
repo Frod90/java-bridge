@@ -1,12 +1,12 @@
 package bridge.service;
 
 import static java.util.Arrays.*;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,15 +22,10 @@ public class BridgeGameTest {
 
 	static BridgeGame bridgeGame;
 
-	@BeforeAll
-	static void setUp() {
+	@BeforeEach
+	void setUp() {
 		List<String> bridge = asList("U", "U", "D", "U", "D", "D");
 		bridgeGame = new BridgeGame(bridge);
-	}
-
-	@AfterEach
-	void clear() {
-		bridgeGame.retry("R");
 	}
 
 	@DisplayName("지정된 크기를 벗어난 다리가 주입될 경우 오류 발생 테스트")
@@ -71,11 +66,9 @@ public class BridgeGameTest {
 	@ValueSource(strings = {"s", "S", "a", "1", "-99", "", "    "})
 	void validateInputWrongMoveOptionTest(String input) {
 
-		IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-			() -> bridgeGame.move(input));
-
-		assertEquals(e.getMessage(), ErrorMessage.INPUT_MOVE_OPTION_SIGNATURE);
-
+		assertThatThrownBy(() -> bridgeGame.move(input))
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessage(ErrorMessage.INPUT_MOVE_OPTION_SIGNATURE);
 	}
 
 	@DisplayName("이동 테스트")
@@ -120,6 +113,95 @@ public class BridgeGameTest {
 			//then
 			assertFalse(bridgeGame.isMoveSuccess());
 		}
+	}
+
+	@DisplayName("잘못된 재시작, 종료 입력 테스트")
+	@ParameterizedTest
+	@ValueSource(strings = {"U", "D", "1", "", " "})
+	void validateGameCommendTest(String input) {
+
+		assertAll(
+			() -> assertThatThrownBy(() -> bridgeGame.retry(input))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessage(ErrorMessage.GAME_COMMEND_INPUT),
+			() -> assertThatThrownBy(() -> bridgeGame.isGiveUp(input))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessage(ErrorMessage.GAME_COMMEND_INPUT)
+		);
+	}
+
+	@DisplayName("재시작 테스트")
+	@Test
+	void retryTest() {
+
+		//given
+		String[] inputMoveOptions = {"U", "U", "D", "U", "D", "D"};
+		for (String inputMoveOption : inputMoveOptions) {
+			bridgeGame.move(inputMoveOption);
+		}
+
+		//when
+		String inputGameCommend = "R";
+		bridgeGame.retry(inputGameCommend);
+
+		//then
+		assertAll(
+			() -> assertEquals(0, bridgeGame.getMoveCount()),
+			() -> assertEquals(2, bridgeGame.getTryCount()),
+			() -> assertFalse(bridgeGame.isGiveUp(inputGameCommend))
+		);
+	}
+
+	@DisplayName("포기 테스트")
+	@Test
+	void giveUpTest() {
+
+		//given
+		String[] inputMoveOptions = {"U", "U", "D"};
+		for (String inputMoveOption : inputMoveOptions) {
+			bridgeGame.move(inputMoveOption);
+		}
+
+		//when
+		String inputGameCommend = "Q";
+		bridgeGame.retry(inputGameCommend);
+
+		//then
+		assertAll(
+			() -> assertEquals(3, bridgeGame.getMoveCount()),
+			() -> assertEquals(1, bridgeGame.getTryCount()),
+			() -> assertTrue(bridgeGame.isGiveUp(inputGameCommend))
+		);
+	}
+
+	@DisplayName("건너기 성공 테스트")
+	@Test
+	void crossTrueBridgeTest() {
+
+		//given
+		String[] inputMoveOptions = {"U", "U", "D", "U", "D", "D"};
+		//when
+		for (String inputMoveOption : inputMoveOptions) {
+			bridgeGame.move(inputMoveOption);
+		}
+
+		//then
+		assertTrue(bridgeGame.isCrossBridge());
+	}
+
+	@DisplayName("건너기 실패 테스트")
+	@Test
+	void crossFalseBridgeTest() {
+
+		//given
+		String[] inputMoveOptions = {"U", "U", "D", "U", "D", "U"};
+		//when
+		for (String inputMoveOption : inputMoveOptions) {
+			bridgeGame.move(inputMoveOption);
+		}
+
+		//then
+		assertFalse(bridgeGame.isCrossBridge());
 	}
 
 }
