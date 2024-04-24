@@ -18,7 +18,6 @@ public class BridgeMapMaker {
 	public String make(List<String> bridge, boolean moveSuccessSign, int moveCount) {
 		StringJoiner upSideMap = new StringJoiner(SEPARATOR_MAP_FORMAT, START_MAP_FORMAT, END_MAP_FORMAT);
 		StringJoiner downSideMap = new StringJoiner(SEPARATOR_MAP_FORMAT, START_MAP_FORMAT, END_MAP_FORMAT);
-		// StringJoiner 사용하기
 
 		for (int i = 0; i < moveCount + INDEX_CONVERTER; i++) {
 			upSideMap.add(makeUpSideSection(bridge, i));
