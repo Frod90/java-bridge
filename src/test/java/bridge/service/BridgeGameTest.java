@@ -66,4 +66,60 @@ public class BridgeGameTest {
 		assertEquals(e.getMessage(), ErrorMessage.MOVE_OPTION_SIGNATURE);
 	}
 
+	@DisplayName("이동 옵션 입력 오류 발생 테스트")
+	@ParameterizedTest
+	@ValueSource(strings = {"s", "S", "a", "1", "-99", "", "    "})
+	void validateInputWrongMoveOptionTest(String input) {
+
+		IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+			() -> bridgeGame.move(input));
+
+		assertEquals(e.getMessage(), ErrorMessage.INPUT_MOVE_OPTION_SIGNATURE);
+
+	}
+
+	@DisplayName("이동 테스트")
+	@ParameterizedTest
+	@ValueSource(strings = {"U", "D", "UU", "UUD", "UUDU", "UUDUDD", "UUDUDU"})
+	void injectBridgeTest(String input) {
+
+		String[] inputs = input.split("");
+
+		for (String eachInput : inputs) {
+			bridgeGame.move(eachInput);
+		}
+
+		assertEquals(inputs.length, bridgeGame.getMoveCount());
+	}
+
+	@DisplayName("이동 확인 테스트")
+	@Test
+	void isTrueMoveSuccessTest() {
+
+		//given
+		String[] inputs = {"U", "U", "D", "U", "D", "D"};
+
+		for (String eachInput : inputs) {
+			//when
+			bridgeGame.move(eachInput);
+			//then
+			assertTrue(bridgeGame.isMoveSuccess());
+		}
+	}
+
+	@DisplayName("이동 확인 테스트")
+	@Test
+	void isFalseMoveSuccessTest() {
+
+		//given
+		String[] inputs = {"d", "d", "u", "d", "u", "u"};
+
+		for (String eachInput : inputs) {
+			//when
+			bridgeGame.move(eachInput);
+			//then
+			assertFalse(bridgeGame.isMoveSuccess());
+		}
+	}
+
 }
