@@ -100,19 +100,27 @@ public class BridgeGameTest {
 		}
 	}
 
-	@DisplayName("이동 확인 테스트")
-	@Test
-	void isFalseMoveSuccessTest() {
+	@DisplayName("이동불가 상태에서 이동 메서드 호출 테스트")
+	@ParameterizedTest
+	@ValueSource(strings = {"D", "UUU", "UUDUDU", "UUDUDD"})
+	void wrongCallMoveTest(String input) {
 
 		//given
-		String[] inputs = {"d", "d", "u", "d", "u", "u"};
+		String[] inputs = input.split("");
 
 		for (String eachInput : inputs) {
-			//when
 			bridgeGame.move(eachInput);
-			//then
-			assertFalse(bridgeGame.isMoveSuccess());
 		}
+
+		//when, then
+		assertAll(
+			() -> assertThatThrownBy(() -> bridgeGame.move("U"))
+				.isInstanceOf(IllegalStateException.class)
+				.hasMessage(ErrorMessage.WRONG_CALL_MOVE),
+			() -> assertThatThrownBy(() -> bridgeGame.move("D"))
+				.isInstanceOf(IllegalStateException.class)
+				.hasMessage(ErrorMessage.WRONG_CALL_MOVE)
+		);
 	}
 
 	@DisplayName("잘못된 재시작, 종료 입력 테스트")
