@@ -1,6 +1,7 @@
 package bridge.service;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 import bridge.constant.BridgeMoveOption;
 
@@ -15,17 +16,18 @@ public class BridgeMapMaker {
 	private static final int INDEX_CONVERTER = -1;
 
 	public String make(List<String> bridge, boolean moveSuccessSign, int moveCount) {
-		StringBuilder upSideMap = new StringBuilder(START_MAP_FORMAT);
-		StringBuilder downSideMap = new StringBuilder(START_MAP_FORMAT);
+		StringJoiner upSideMap = new StringJoiner(SEPARATOR_MAP_FORMAT, START_MAP_FORMAT, END_MAP_FORMAT);
+		StringJoiner downSideMap = new StringJoiner(SEPARATOR_MAP_FORMAT, START_MAP_FORMAT, END_MAP_FORMAT);
+		// StringJoiner 사용하기
 
 		for (int i = 0; i < moveCount + INDEX_CONVERTER; i++) {
-			upSideMap.append(makeUpSideSection(bridge, i)).append(SEPARATOR_MAP_FORMAT);
-			downSideMap.append(makeDownSideSection(bridge, i)).append(SEPARATOR_MAP_FORMAT);
+			upSideMap.add(makeUpSideSection(bridge, i));
+			downSideMap.add(makeDownSideSection(bridge, i));
 		}
 
-		upSideMap.append(makeUpSideLastSection(bridge, moveSuccessSign, moveCount)).append(END_MAP_FORMAT);
-		downSideMap.append(makeDownSideLastSection(bridge, moveSuccessSign, moveCount)).append(END_MAP_FORMAT);
-		return upSideMap.append("\n").append(downSideMap).toString();
+		upSideMap.add(makeUpSideLastSection(bridge, moveSuccessSign, moveCount));
+		downSideMap.add(makeDownSideLastSection(bridge, moveSuccessSign, moveCount));
+		return upSideMap + "\n" + downSideMap;
 	}
 
 	private String makeUpSideLastSection(List<String> bridge, boolean moveSuccessSign, int moveCount) {
