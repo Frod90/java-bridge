@@ -58,7 +58,7 @@ public class BridgeGame {
 	}
 
 	private void validateMovable() {
-		if(!moveSuccessSign) {
+		if(!moveSuccessSign || moveCount >= bridge.size()) {
 			throw new IllegalStateException(ErrorMessage.WRONG_CALL_MOVE);
 		}
 	}
