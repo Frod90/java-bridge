@@ -8,5 +8,6 @@ public class ErrorMessage {
 	public static final String  NUMERIC_INPUT = ERROR_INDICATION + " 숫자만 입력해야 합니다.";
 	public static final String  BRIDGE_SIZE_INPUT = ERROR_INDICATION + " 다리의 길이는 3이상 20이하만 가능합니다.";
 	public static final String  GAME_COMMEND_INPUT = ERROR_INDICATION + " 재시작(R), 종료(Q) 명령어만 입력 가능합니다.";
+	public static final String  WRONG_CALL_MOVE = ERROR_INDICATION + " 이동 불가 상태에서 이동 메서드가 호출되었습니다.";
 
 }

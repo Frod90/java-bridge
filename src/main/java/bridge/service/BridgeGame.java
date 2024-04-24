@@ -14,7 +14,7 @@ public class BridgeGame {
 	private final List<String> bridge;
 	private int moveCount;
 	private int tryCount;
-	private boolean moveSuccessSign;
+	private boolean moveSuccessSign = true;
 
 	public BridgeGame(List<String> bridge) {
 
@@ -47,16 +47,20 @@ public class BridgeGame {
 	}
 
 	public void move(String moveOptionSignature) {
-
 		validateInputMoveOptionSignature(moveOptionSignature);
+		validateMovable();
 		moveCount++;
-
 		if (moveOptionSignature.equalsIgnoreCase(bridge.get(moveCount + INDEX_CONVERTER))) {
 			moveSuccessSign = true;
 			return;
 		}
-
 		moveSuccessSign = false;
+	}
+
+	private void validateMovable() {
+		if(!moveSuccessSign) {
+			throw new IllegalStateException(ErrorMessage.WRONG_CALL_MOVE);
+		}
 	}
 
 	private void validateInputMoveOptionSignature(String moveOptionSignature) {
